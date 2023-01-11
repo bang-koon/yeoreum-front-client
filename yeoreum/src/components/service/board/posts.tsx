@@ -1,39 +1,87 @@
 import styled from '@emotion/styled';
 import Link from 'next/link';
 import Image from 'next/image';
+import { RenderProps, FlagIndex, Tag } from '../../../types/service';
 
-const Posts = () => {
-  const infos = [
-    {
-      kind: 'Notice',
-      title: '여름이 시작되었습니다.',
-      date: '2023.03.01',
+const Posts = ({ flag }: { flag: string }) => {
+  const tag = {
+    notice: {
+      notice: { color: '#004D94', text: 'Notice' },
+      event: { color: '#ECC600', text: 'Event' },
     },
-    {
-      kind: 'Event',
-      title: '새 학기를 여름과!',
-      date: '2023.03.01',
+    inquiry: {
+      onGoing: { color: '#989898', text: '답변 대기' },
+      complete: { color: '#139013', text: '답변 완료' },
     },
-    {
-      kind: 'Notice',
-      title: '여름이 시작되었습니다.',
-      date: '2023.03.01',
-    },
-    {
-      kind: 'Event',
-      title: '새 학기를 여름과!',
-      date: '2023.03.01',
-    },
-    {
-      kind: 'Notice',
-      title: '여름이 시작되었습니다.',
-      date: '2023.03.01',
-    },
-  ];
-  const PostRender = ({ kind, title, date }: typeof infos[0]) => {
+  };
+
+  // 임시 데이터
+  let infos: any[] = [];
+  if (flag === 'notice') {
+    infos = [
+      {
+        status: 'event',
+        title: '여름이 시작되었습니다.',
+        date: '2023.03.01',
+      },
+      {
+        status: 'notice',
+        title: '새 학기를 여름과!',
+        date: '2023.03.01',
+      },
+      {
+        status: 'notice',
+        title: '여름이 시작되었습니다.',
+        date: '2023.03.01',
+      },
+      {
+        status: 'event',
+        title: '새 학기를 여름과!',
+        date: '2023.03.01',
+      },
+      {
+        status: 'notice',
+        title: '여름이 시작되었습니다.',
+        date: '2023.03.01',
+      },
+    ];
+  } else {
+    infos = [
+      {
+        status: 'onGoing',
+        title: '여름이 시작되었습니다.',
+        date: '2023.03.01',
+      },
+      {
+        status: 'complete',
+        title: '새 학기를 여름과!',
+        date: '2023.03.01',
+      },
+      {
+        status: 'complete',
+        title: '여름이 시작되었습니다.',
+        date: '2023.03.01',
+      },
+      {
+        status: 'onGoing',
+        title: '새 학기를 여름과!',
+        date: '2023.03.01',
+      },
+      {
+        status: 'complete',
+        title: '여름이 시작되었습니다.',
+        date: '2023.03.01',
+      },
+    ];
+  }
+
+  const PostRender = ({ status, title, date }: RenderProps) => {
+    const color = (tag as FlagIndex)[flag][status].color;
     return (
       <Wrapper>
-        <Kind kind={kind}>{kind}</Kind>
+        <Tag status={status} color={color}>
+          {(tag as FlagIndex)[flag][status].text}
+        </Tag>
         <Date>{date}</Date>
         <Title>{title}</Title>
         <Link href="/service/notice">
@@ -52,7 +100,7 @@ const Posts = () => {
       {infos.map((info, i) => {
         return (
           <PostRender
-            kind={info.kind}
+            status={info.status}
             date={info.date}
             title={info.title}
             key={i}
@@ -63,10 +111,6 @@ const Posts = () => {
   );
 };
 
-interface Kind {
-  kind: string;
-  children: React.ReactNode;
-}
 const Wrapper = styled.div`
   position: relative;
   padding: 1em 1em 1em 1em;
@@ -79,8 +123,8 @@ const Wrapper = styled.div`
     margin-top: -16px;
   }
 `;
-const Kind = styled.p<Kind>`
-  ${p => (p.kind === 'Notice' ? `color: #004D94;` : 'color: #ECC600;')}
+const Tag = styled.p<Tag>`
+  color: ${p => p.color};
   display: inline-block;
   font-size: 0.875em;
 `;

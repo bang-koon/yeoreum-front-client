@@ -10,10 +10,10 @@ const Board = () => {
   return (
     <Container>
       <Header>
-        <Title>공지사항</Title>
+        <Title>문의내역</Title>
         <Search />
       </Header>
-      <Posts flag="notice" />
+      <Posts flag="inquiry" />
     </Container>
   );
 };
