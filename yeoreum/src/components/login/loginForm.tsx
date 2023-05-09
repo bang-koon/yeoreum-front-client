@@ -10,10 +10,22 @@ const loginForm = () => {
   const [user, setUser] = useState({ email: '', password: '' });
   const loginMutation = useLoginMutation(
     data => {
-      const token = data.response.user.accessToken;
-      alert(data.msg);
-      localStorage.setItem('token', token);
-      router.replace('/');
+      const user = data.response.user;
+      if (user.status != 3) {
+        router.push(
+          {
+            pathname: 'signup',
+            query: { userNo: user.userNo, status: user.status },
+          },
+          '/signup',
+        );
+      } else {
+        console.log(data);
+        const token = data.response.user.accessToken;
+        alert(data.msg);
+        localStorage.setItem('token', token);
+        router.replace('/');
+      }
     },
     (error: any) => {
       const msg = error.response.data.message;

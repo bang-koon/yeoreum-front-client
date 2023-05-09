@@ -1,13 +1,16 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import SignUpForm from './SignUpForm';
 import SignUpProfileForm from './SignUpProfileForm';
 import SignUpCertificate from './SignUpCertificate';
 import SignUpNotice from './SignUpNotice';
 
 const SignUpBodyIndex = () => {
+  const router = useRouter();
+  console.log(router.query);
   const [userInfo, setUserInfo] = useState<any>({
-    userNo: undefined,
-    status: undefined,
+    userNo: router.query.userNo || undefined,
+    status: router.query.status || undefined,
   });
 
   const components = {
